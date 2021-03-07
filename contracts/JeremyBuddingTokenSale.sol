@@ -3,7 +3,7 @@ pragma solidity ^0.5.16;
 import "./JeremyBuddingToken.sol";
 
 contract JeremyBuddingTokenSale {
-	address admin;
+	address payable admin;
 	JeremyBuddingToken public tokenContract;
 	uint256 public tokenPrice;
 	uint256 public tokensSold;
@@ -28,5 +28,12 @@ contract JeremyBuddingTokenSale {
 		tokensSold += _numberOfTokens;
 
 		emit Sell(msg.sender,_numberOfTokens);
+	}
+
+	// Ending Token JeremyBuddingSale
+	function endSale() public{
+		require (msg.sender == admin);
+		require(tokenContract.transfer(admin, tokenContract.balanceOf(address(this))));
+		admin.transfer(address(this).balance);
 	}
 }
